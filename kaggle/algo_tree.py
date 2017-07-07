@@ -3,6 +3,7 @@ warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
 from sklearn import tree
+from sklearn.ensemble import RandomForestClassifier
 
 train=pd.read_csv("train.csv")
 test=pd.read_csv("test.csv")
@@ -35,8 +36,9 @@ train["Sex"][train["Sex"]=="male"]=0
 target=train["Survived"].values
 features=train[["Pclass", "Sex", "Age", "Fare"]].values
 
-my_tree=tree.DecisionTreeClassifier(max_depth=10,min_samples_split=5,random_state=1)
-my_tree=my_tree.fit(features,target)
+#my_tree=tree.DecisionTreeClassifier(max_depth=10,min_samples_split=5,random_state=1)
+my_forest=RandomForestClassifier(n_estimators=10,criterion='entropy')
+my_forest=my_forest.fit(features,target)
 
 #print(my_tree.feature_importances_)
 #print(my_tree.score(features,target))
@@ -49,12 +51,12 @@ test["Fare"]=test["Fare"].fillna(test["Fare"].median())
 #test["Child"]=test["SibSp"].values + test["Parch"].values + 1
 
 test_features=test[["Pclass", "Sex", "Age", "Fare"]].values
-prediction=my_tree.predict(test_features)
+prediction=my_forest.predict(test_features)
 
 PassengerId=np.array(test["PassengerId"],int)
 solution=pd.DataFrame(prediction,PassengerId,columns=["Survived"])
 
-solution.to_csv("tree_solution.csv",index_label = ["PassengerId"])
+solution.to_csv("forest_solution.csv",index_label = ["PassengerId"])
 
 #print(train.isnull().sum())
 #print(test.info())
