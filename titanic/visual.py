@@ -7,6 +7,9 @@ import seaborn as sns
 import matplotlib.gridspec as gridspec
 from scipy import stats
 
+
+"""
+
 train=pd.read_csv("train.csv")
 test=pd.read_csv("test.csv")
 combine=pd.concat([train.drop("Survived",1),test])
@@ -37,7 +40,6 @@ sns.distplot(ns["Fare"].dropna().values+1,bins=range(0,81,1),kde=False,color=ns_
 plt.subplots_adjust(hspace=0.35,wspace=0.25)
 plt.show()
 
-"""
 plt.figure()
 foo=sns.heatmap(train.drop('PassengerId',axis=1).corr(),vmax=0.6,square=True,annot=True)
 plt.show()
@@ -135,6 +137,35 @@ ax.set_yscale('log')
 plt.show()
 
 """
+#print(  combine.where((combine["Pclass"]==1)&(combine["Sex"]=="female"))
+#.groupby(["Embarked","Pclass","Sex","Parch","SibSp"]).size()  )
+
+
+train=pd.read_csv("train.csv")
+test=pd.read_csv("test.csv")
+survived=train["Survived"]
+combine=pd.concat([train.drop("Survived",1),test])
+
+combine[ "Child"]=combine["Age"]<=10
+combine["Family"]=combine["Parch"]+combine["SibSp"]
+combine["Alone"]=combine["Parch"]+combine["SibSp"]==0
+combine["Largefamily"]=(combine["Parch"]>3) | (combine["SibSp"]>2)
+combine["Deck"]=combine["Cabin"].str[0]
+combine["Deck"]=combine["Deck"].fillna("U")
+combine["Ttype"]=combine["Ticket"].str[0]
+combine["Title"]=combine["Name"].str.split(',',expand=True)[1].str.split('.',expand=True)[0]
+combine["Young"]=(combine["Age"]<=30)|(combine["Title"].isin(["Master","Miss","Mlle"]))
+combine["Shared_Ticket"]=np.where(combine.groupby("Ticket")["Name"].transform('count')>1,1,0)
+combine['Ticket_group'] = combine.groupby('Ticket')['Name'].transform('count')
+
+test=combine.iloc[len(train):]
+train=combine.iloc[:len(train)]
+train["Survived"]=survived
+surv = train[train['Survived']==1]
+nosurv = train[train['Survived']==0]
+
+#Child
+print(pd.crosstab(train["Deck"],train["Survived"]))
 
 
 
@@ -144,6 +175,12 @@ plt.show()
 
 
 
+#probability distribution
+#pmf pdf binomial trial and distribution multinomial trial and distribution
+#variance bias tradeoff
+#eigen vectors and eigen values
+#inner product significance (projection and similarity)
+#l2 l1 norms and errors and regularization
 
-#binomial test and binomial distribution
-#pandas why we use .loc
+#Preprocessing of data: Data normalization
+#Model evalution metrices
