@@ -18,7 +18,8 @@ from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import VotingClassifier
-from sklearn import svm
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
 
 #import xgboost as xgb
 #from mlxtend.classifier import StackingClassifier
@@ -29,7 +30,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 
-
+import operator
 
 train=pd.read_csv("train.csv")
 test=pd.read_csv("test.csv")
@@ -79,11 +80,33 @@ X=train.loc[:,cols]
 y=np.ravel(train.loc[:,["Survived"]])
 X_test=test.loc[:,cols]
 
-clf=ExtraTreesClassifier(criterion='gini',max_depth=10,\
-	class_weight=None,min_samples_split=5,random_state=0)
-eq=clf.fit(X,y)
-print(eq.score(X,y))
-prediction=eq.predict(X_test)
-PassengerId=np.array(test["PassengerId"],int)
-solution=pd.DataFrame(prediction,PassengerId,columns=["Survived"])
-#solution.to_csv('tree_solution.csv',index_label=['PassengerId'])
+
+"""classifiers=[DecisionTreeClassifier(),RandomForestClassifier()]
+			#SVC(),KNeighborsClassifier(),LogisticRegression()]
+predictions=[]
+
+for classifier in classifiers:
+	clf=classifier
+	eq=clf.fit(X,y)
+	prediction=eq.predict(X_test)
+	predictions.append(prediction)
+
+
+y_test=[]
+for i in range(len(predictions[0])):
+	count={1:0,0:0}
+	for j in range(len(predictions)):
+		key=predictions[j][i]
+		count[key]=count.setdefault(key,0)+1
+	count=sorted(count.items(),key=operator.itemgetter(1),reverse=True)
+	y_test.append(count[0][0])
+
+
+"""
+
+classifiers=[RandomForestClassifier(random_state=1),GaussianNB(),SVC(kernel='rbf')]
+
+clf=VotingClassifier([('rf',classifiers[0]),('gnb',classifiers[1]),('svc',classifiers[2])],voting='hard')
+print(clf.fit_transform(X,y)[:10])
+
+

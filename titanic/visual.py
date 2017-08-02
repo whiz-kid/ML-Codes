@@ -8,17 +8,18 @@ import matplotlib.gridspec as gridspec
 from scipy import stats
 
 
-"""
 
 train=pd.read_csv("train.csv")
 test=pd.read_csv("test.csv")
 combine=pd.concat([train.drop("Survived",1),test])
+print(train.head())
 
 s=train[train["Survived"]==1]
 ns=train[train["Survived"]==0]
 
 s_col="blue"
 ns_col="red"
+"""
 
 plt.figure()
 plt.subplot(331)
