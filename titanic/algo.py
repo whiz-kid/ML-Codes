@@ -21,7 +21,7 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 
-#import xgboost as xgb
+import xgboost as xgb
 #from mlxtend.classifier import StackingClassifier
 
 from sklearn.model_selection import cross_val_score
