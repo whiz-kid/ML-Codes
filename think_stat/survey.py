@@ -2,6 +2,7 @@
 import sys
 import gzip
 import os
+import numpy as np
 
 class Record(object):
     """Represents a record."""
