@@ -6,8 +6,8 @@ import operator
 
 
 def data():
-	arr_train=np.array([[5.2,2.2,1.0],[5.1,2.4,1.0],[5.8,1.4,0.0],[6.1,1.1,0.0],[5.2,2.3,1.0],[5.9,1.3,0.0]])
-	train=pd.DataFrame(arr_train,columns=['height','width','girl'])
+	arr_trains=np.array([[5.2,2.2,1.0],[5.1,2.4,1.0],[5.8,1.4,0.0],[6.1,1.1,0.0],[5.2,2.3,1.0],[5.9,1.3,0.0]])
+	train=pd.DataFrame(arr_trains,columns=['height','width','girl'])
 	arr_test=np.array([[5.1,1.8],[6.0,2.0],[5.8,1.9]])
 	test=pd.DataFrame(arr_test,columns=['height','width'])
 	return train,test
